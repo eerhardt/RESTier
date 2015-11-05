@@ -22,7 +22,6 @@ using Microsoft.OData.Edm.Library;
 using Microsoft.Restier.Core;
 using Microsoft.Restier.Core.Query;
 using Microsoft.Restier.Core.Submit;
-using Microsoft.Restier.WebApi.Batch;
 using Microsoft.Restier.WebApi.Filters;
 using Microsoft.Restier.WebApi.Properties;
 using Microsoft.Restier.WebApi.Results;
@@ -110,13 +109,19 @@ namespace Microsoft.Restier.WebApi
                 null,
                 edmEntityObject.CreatePropertyDictionary());
 
+#if BATCH
+// TODO (.NETCORE)
             RestierChangeSetProperty changeSetProperty = this.Request.GetChangeSet();
             if (changeSetProperty == null)
             {
+#endif
                 ChangeSet changeSet = new ChangeSet();
                 changeSet.Entries.Add(postEntry);
 
                 SubmitResult result = await Api.SubmitAsync(changeSet, cancellationToken);
+#if BATCH
+// TODO (.NETCORE)
+
             }
             else
             {
@@ -124,6 +129,7 @@ namespace Microsoft.Restier.WebApi
 
                 await changeSetProperty.OnChangeSetCompleted();
             }
+#endif
 
             return this.CreateCreatedODataResult(postEntry.Entity);
         }
@@ -181,13 +187,18 @@ namespace Microsoft.Restier.WebApi
                 this.GetOriginalValues(),
                 null);
 
+#if BATCH
+// TODO (.NETCORE)
             RestierChangeSetProperty changeSetProperty = this.Request.GetChangeSet();
             if (changeSetProperty == null)
             {
+#endif
                 ChangeSet changeSet = new ChangeSet();
                 changeSet.Entries.Add(deleteEntry);
 
                 SubmitResult result = await Api.SubmitAsync(changeSet, cancellationToken);
+#if BATCH
+// TODO (.NETCORE)
             }
             else
             {
@@ -195,6 +206,7 @@ namespace Microsoft.Restier.WebApi
 
                 await changeSetProperty.OnChangeSetCompleted();
             }
+#endif
 
             return this.StatusCode(HttpStatusCode.NoContent);
         }
@@ -215,13 +227,18 @@ namespace Microsoft.Restier.WebApi
 
             ActionInvocationEntry entry = new ActionInvocationEntry(actionPathSegment.ActionName, null);
 
+#if BATCH
+// TODO (.NETCORE)
             RestierChangeSetProperty changeSetProperty = this.Request.GetChangeSet();
             if (changeSetProperty == null)
             {
+#endif
                 ChangeSet changeSet = new ChangeSet();
                 changeSet.Entries.Add(entry);
 
                 SubmitResult result = await Api.SubmitAsync(changeSet, cancellationToken);
+#if BATCH
+// TODO (.NETCORE)
             }
             else
             {
@@ -229,6 +246,7 @@ namespace Microsoft.Restier.WebApi
 
                 await changeSetProperty.OnChangeSetCompleted();
             }
+#endif
 
             if (entry.Result != null)
             {
@@ -302,13 +320,18 @@ namespace Microsoft.Restier.WebApi
                 edmEntityObject.CreatePropertyDictionary());
             updateEntry.IsFullReplaceUpdate = isFullReplaceUpdate;
 
+#if BATCH
+// TODO (.NETCORE)
             RestierChangeSetProperty changeSetProperty = this.Request.GetChangeSet();
             if (changeSetProperty == null)
             {
+#endif
                 ChangeSet changeSet = new ChangeSet();
                 changeSet.Entries.Add(updateEntry);
 
                 SubmitResult result = await Api.SubmitAsync(changeSet, cancellationToken);
+#if BATCH
+// TODO (.NETCORE)
             }
             else
             {
@@ -316,6 +339,7 @@ namespace Microsoft.Restier.WebApi
 
                 await changeSetProperty.OnChangeSetCompleted();
             }
+#endif
 
             return this.CreateUpdatedODataResult(updateEntry.Entity);
         }

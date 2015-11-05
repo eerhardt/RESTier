@@ -5,7 +5,6 @@ using System;
 using System.ComponentModel;
 using System.Net.Http;
 using Microsoft.Restier.Core;
-using Microsoft.Restier.WebApi.Batch;
 
 namespace Microsoft.Restier.WebApi
 {
@@ -18,6 +17,8 @@ namespace Microsoft.Restier.WebApi
         private const string ChangeSetKey = "Microsoft.Restier.Submit.ChangeSet";
         private const string ApiFactoryKey = "Microsoft.Restier.Core.ApiFactory";
 
+#if BATCH
+// TODO (.NETCORE)
         /// <summary>
         /// Gets the <see cref="RestierChangeSetProperty"/> from the <see cref="HttpRequestMessage"/>.
         /// </summary>
@@ -35,6 +36,7 @@ namespace Microsoft.Restier.WebApi
 
             return null;
         }
+#endif
 
         /// <summary>
         /// Gets the API factory from the <see cref="HttpRequestMessage"/>.
