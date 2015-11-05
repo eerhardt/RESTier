@@ -3,7 +3,7 @@
 
 using System;
 using System.Net.Http;
-using System.Web.OData.Formatter.Serialization;
+using Microsoft.AspNet.OData.Formatter.Serialization;
 using Microsoft.OData.Edm;
 using Microsoft.Restier.WebApi.Results;
 

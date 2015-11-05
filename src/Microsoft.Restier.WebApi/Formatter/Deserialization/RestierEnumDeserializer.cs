@@ -2,9 +2,9 @@
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
 using System;
-using System.Web.OData;
-using System.Web.OData.Formatter.Deserialization;
-using Microsoft.OData.Core;
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Formatter.Deserialization;
+using Microsoft.AspNet.OData;
 using Microsoft.OData.Edm;
 
 namespace Microsoft.Restier.WebApi.Formatter.Deserialization

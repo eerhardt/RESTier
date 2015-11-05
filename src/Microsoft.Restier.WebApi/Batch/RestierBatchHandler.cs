@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Batch;
 using System.Web.OData.Batch;
-using Microsoft.OData.Core;
+using Microsoft.AspNet.OData;
 using Microsoft.Restier.Core;
 using Microsoft.Restier.WebApi.Properties;
 
