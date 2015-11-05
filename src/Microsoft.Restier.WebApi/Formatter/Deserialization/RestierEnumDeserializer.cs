@@ -3,8 +3,8 @@
 
 using System;
 using Microsoft.AspNet.OData;
+using Microsoft.OData.Core;
 using Microsoft.AspNet.OData.Formatter.Deserialization;
-using Microsoft.AspNet.OData;
 using Microsoft.OData.Edm;
 
 namespace Microsoft.Restier.WebApi.Formatter.Deserialization

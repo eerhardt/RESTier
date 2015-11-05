@@ -9,6 +9,7 @@ using System.Linq.Expressions;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNet.OData;
 using Microsoft.OData.Core.UriParser;
+using Microsoft.OData.Core;
 using Microsoft.OData.Edm;
 using Microsoft.Restier.Core;
 using Microsoft.Restier.WebApi.Properties;
