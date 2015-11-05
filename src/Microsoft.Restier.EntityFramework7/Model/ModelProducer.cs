@@ -13,6 +13,7 @@ using Microsoft.Restier.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using EdmModel = Microsoft.OData.Edm.Library.EdmModel;
@@ -87,7 +88,7 @@ namespace Microsoft.Restier.EntityFramework.Model
 
             var dbSetProperties = dbContext.GetType().
                 GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance).
-                Where(e => e.PropertyType.IsGenericType && e.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>)).
+                Where(e => e.PropertyType.GetTypeInfo().IsGenericType && e.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>)).
                 ToDictionary(e => e.PropertyType.GetGenericArguments()[0]);
 
             // TODO GitHubIssue#36 : support complex and entity inheritance
@@ -146,10 +147,11 @@ namespace Microsoft.Restier.EntityFramework.Model
                 {
                     string defaultValue = null;
 
-                    if (efProperty.SqlServer().DefaultValue != null)
-                    {
-                        defaultValue = efProperty.SqlServer().DefaultValue.ToString();
-                    }
+                    // TODO (.NETCORE) 
+                    //if (efProperty.SqlServer().DefaultValue != null)
+                    //{
+                    //    defaultValue = efProperty.SqlServer().DefaultValue.ToString();
+                    //}
 
                     var property = entityType.AddStructuralProperty(
                         efProperty.Name, type, defaultValue,
@@ -193,7 +195,7 @@ namespace Microsoft.Restier.EntityFramework.Model
         {
             var kind = EdmPrimitiveTypeKind.None;
             var propertyType = efProperty.ClrType;
-            if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(System.Nullable<>))
+            if (propertyType.GetTypeInfo().IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(System.Nullable<>))
             {
                 propertyType = propertyType.GetGenericArguments()[0];
             }

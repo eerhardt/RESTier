@@ -9,6 +9,7 @@ using System.Data.Entity;
 #endif
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using Microsoft.Restier.Core.Query;
 
 namespace Microsoft.Restier.EntityFramework.Query
