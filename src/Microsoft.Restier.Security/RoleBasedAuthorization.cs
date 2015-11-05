@@ -181,7 +181,8 @@ namespace Microsoft.Restier.Security
         /// </returns>
         protected virtual bool IsInRole(string role)
         {
-            return Thread.CurrentPrincipal.IsInRole(role);
+            return true;
+            // TODO (.NETCORE)            return Thread.CurrentPrincipal.IsInRole(role);
         }
     }
 }

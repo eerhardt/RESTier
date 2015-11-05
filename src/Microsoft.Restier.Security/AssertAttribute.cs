@@ -10,7 +10,7 @@ namespace Microsoft.Restier.Security
     /// Specifies an API security policy that asserts a role should be
     /// present for the current principal on the target type or member.
     /// </summary>
-    [Serializable]
+// TODO (.NETCORE)    [Serializable]
     [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
     public sealed class AssertAttribute : Attribute, IApiPolicy
     {

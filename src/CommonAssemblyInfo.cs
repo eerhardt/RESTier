@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Resources;
 
 #if !NOT_CLS_COMPLIANT
-[assembly: CLSCompliant(true)]
+// TODO (.NETCORE)    [Serializable][assembly: CLSCompliant(true)]
 #endif
 [assembly: NeutralResourcesLanguage("en-US")]
 
