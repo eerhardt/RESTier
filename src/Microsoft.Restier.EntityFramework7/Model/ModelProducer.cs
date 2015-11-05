@@ -147,11 +147,10 @@ namespace Microsoft.Restier.EntityFramework.Model
                 {
                     string defaultValue = null;
 
-                    // TODO (.NETCORE) 
-                    //if (efProperty.SqlServer().DefaultValue != null)
-                    //{
-                    //    defaultValue = efProperty.SqlServer().DefaultValue.ToString();
-                    //}
+                    if (efProperty.SqlServer().DefaultValue != null)
+                    {
+                        defaultValue = efProperty.SqlServer().DefaultValue.ToString();
+                    }
 
                     var property = entityType.AddStructuralProperty(
                         efProperty.Name, type, defaultValue,
