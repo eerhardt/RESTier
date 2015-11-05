@@ -10,8 +10,9 @@
 
 namespace Microsoft.Restier.Shared {
     using System;
-    
-    
+    using System.Reflection;
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -39,7 +40,7 @@ namespace Microsoft.Restier.Shared {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Restier.WebApi.SharedResources", typeof(SharedResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Restier.WebApi.SharedResources", typeof(SharedResources).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -11,7 +11,7 @@ using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Filters;
+using Microsoft.AspNet.Mvc.Filters;
 using System.Web.Http.Results;
 using Microsoft.AspNet.OData;
 using Microsoft.Restier.Core.Submit;

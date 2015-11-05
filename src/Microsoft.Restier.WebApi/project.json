@@ -6,7 +6,8 @@
   "dependencies": {
     "Microsoft.NETCore": "5.0.1-beta-23409",
     "Microsoft.NETCore.Portable.Compatibility": "1.0.1-beta-23409",
-    "Microsoft.OData.Edm": "6.13.0"
+    "Microsoft.OData.Edm": "6.13.0",
+    "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-16213"
   },
   "frameworks": {
     "dotnet5.4": {
