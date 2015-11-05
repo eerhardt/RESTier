@@ -2,13 +2,12 @@
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
 using System.Linq;
-using System.Web.Http;
-using System.Web.OData;
 using Microsoft.Restier.Samples.Northwind.Models;
+using Microsoft.AspNet.Mvc;
 
 namespace Microsoft.Restier.Samples.Northwind.Controllers
 {
-    public class RegionsController : ODataController
+    public class RegionsController : Controller
     {
         private readonly NorthwindContext _context = new NorthwindContext();
 

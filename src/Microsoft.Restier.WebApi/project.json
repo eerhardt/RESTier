@@ -4,11 +4,11 @@
     "dnxcore50.app": {}
   },
   "dependencies": {
+    "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-16213",
     "Microsoft.NETCore": "5.0.1-beta-23409",
     "Microsoft.NETCore.Portable.Compatibility": "1.0.1-beta-23409",
-    "Microsoft.OData.Core": "6.13.0",
-    "Microsoft.OData.Edm": "6.13.0",
-    "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-16213"
+    "Microsoft.OData.Core": "6.14.0-rc",
+    "Microsoft.OData.Edm": "6.14.0-rc"
   },
   "frameworks": {
     "dotnet5.4": {

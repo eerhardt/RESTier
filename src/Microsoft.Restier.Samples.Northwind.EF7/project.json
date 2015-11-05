@@ -1,0 +1,20 @@
+﻿{
+  "supports": {
+    "net46.app": {},
+    "dnxcore50.app": {}
+  },
+  "dependencies": {
+    "Microsoft.AspNet.Mvc": "6.0.0-rc1-16213",
+    "Microsoft.AspNet.Server.IIS": "1.0.0-beta8-15609",
+    "Microsoft.AspNet.Server.WebListener": "1.0.0-rc1-15832",
+    "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-15819",
+    "Microsoft.NETCore": "5.0.1-beta-23427",
+    "Microsoft.NETCore.Portable.Compatibility": "1.0.1-beta-23427",
+    "Microsoft.OData.Edm": "6.13.0"
+  },
+  "frameworks": {
+    "dotnet5.4": {
+      "imports": "portable-net452"
+    }
+  }
+}
