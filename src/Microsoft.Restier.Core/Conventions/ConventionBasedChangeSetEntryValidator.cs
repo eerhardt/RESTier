@@ -3,8 +3,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Restier.Core.Submit;
@@ -46,39 +46,37 @@ namespace Microsoft.Restier.Core.Conventions
             {
                 object entity = dataModificationEntry.Entity;
 
-                // TODO (.NETCORE): need to figure out how to do this in .NET Core
+                // TODO (.NETCORE): Use PropertyDescriptorCollection in .NET Core (when available?)
+                // TODO GitHubIssue#50 : should this PropertyDescriptorCollection be cached?
+                IEnumerable<PropertyInfo> properties = entity.GetType().GetTypeInfo().DeclaredProperties;
 
-                //// TODO GitHubIssue#50 : should this PropertyDescriptorCollection be cached?
-                //PropertyDescriptorCollection properties =
-                //    new DataAnnotations.AssociatedMetadataTypeTypeDescriptionProvider(entity.GetType())
-                //    .GetTypeDescriptor(entity).GetProperties();
+                DataAnnotations.ValidationContext validationContext = new DataAnnotations.ValidationContext(entity);
 
-                //DataAnnotations.ValidationContext validationContext = new DataAnnotations.ValidationContext(entity);
+                foreach (var property in properties)
+                {
+                    validationContext.MemberName = property.Name;
 
-                //foreach (PropertyDescriptor property in properties)
-                //{
-                //    validationContext.MemberName = property.Name;
+                    IEnumerable<DataAnnotations.ValidationAttribute> validationAttributes =
+                        property.GetCustomAttributes().OfType<DataAnnotations.ValidationAttribute>();
 
-                //    IEnumerable<DataAnnotations.ValidationAttribute> validationAttributes =
-                //        property.Attributes.OfType<DataAnnotations.ValidationAttribute>();
-                //    foreach (DataAnnotations.ValidationAttribute validationAttribute in validationAttributes)
-                //    {
-                //        object value = property.GetValue(entity);
-                //        DataAnnotations.ValidationResult validationResult =
-                //            validationAttribute.GetValidationResult(value, validationContext);
-                //        if (validationResult != DataAnnotations.ValidationResult.Success)
-                //        {
-                //            validationResults.Add(new ValidationResult()
-                //            {
-                //                Id = validationAttribute.GetType().FullName,
-                //                Message = validationResult.ErrorMessage,
-                //                Severity = ValidationSeverity.Error,
-                //                Target = entity,
-                //                PropertyName = property.Name
-                //            });
-                //        }
-                //    }
-                //}
+                    foreach (var validationAttribute in validationAttributes)
+                    {
+                        object value = property.GetValue(entity);
+                        DataAnnotations.ValidationResult validationResult =
+                            validationAttribute.GetValidationResult(value, validationContext);
+                        if (validationResult != DataAnnotations.ValidationResult.Success)
+                        {
+                            validationResults.Add(new ValidationResult()
+                            {
+                                Id = validationAttribute.GetType().FullName,
+                                Message = validationResult.ErrorMessage,
+                                Severity = ValidationSeverity.Error,
+                                Target = entity,
+                                PropertyName = property.Name
+                            });
+                        }
+                    }
+                }
             }
 
             return Task.WhenAll();
