@@ -10,7 +10,7 @@ namespace Microsoft.Restier.Security
     /// Specifies that principal-supplied role-based
     /// security should be enabled for an API.
     /// </summary>
-    [Serializable]
+// TODO (.NETCORE)    [Serializable]
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class EnableRoleBasedSecurityAttribute : ApiConfiguratorAttribute
     {

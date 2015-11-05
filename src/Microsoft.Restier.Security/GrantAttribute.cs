@@ -10,7 +10,7 @@ namespace Microsoft.Restier.Security
     /// Specifies a role-based security statement for an API that
     /// grants permission on a securable element to a specific role.
     /// </summary>
-    [Serializable]
+// TODO (.NETCORE)    [Serializable]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public sealed class GrantAttribute : ApiConfiguratorAttribute
     {
