@@ -10,7 +10,6 @@ NuGet.exe
 project.lock.json
 _[Ss]cripts
 *.exe
-*.dll
 *.nupkg
 *.dot[Cc]over
 *.vsp

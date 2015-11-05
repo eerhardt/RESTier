@@ -1,6 +1,9 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
+#if false
+// TODO (.NETCORE)
+
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -117,3 +120,4 @@ namespace Microsoft.Restier.WebApi.Batch
         }
     }
 }
+#endif

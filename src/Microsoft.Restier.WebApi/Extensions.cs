@@ -3,8 +3,8 @@
 
 using System.Collections.Generic;
 using System.Reflection;
-using System.Web.OData;
-using System.Web.OData.Formatter;
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Formatter;
 
 namespace Microsoft.Restier.WebApi
 {

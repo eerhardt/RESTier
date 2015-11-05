@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Filters;
 using System.Web.Http.Results;
-using Microsoft.OData.Core;
+using Microsoft.AspNet.OData;
 using Microsoft.Restier.Core.Submit;
 
 namespace Microsoft.Restier.WebApi.Filters

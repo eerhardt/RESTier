@@ -2,8 +2,8 @@
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
 using System;
-using System.Web.OData.Formatter.Serialization;
-using Microsoft.OData.Core;
+using Microsoft.AspNet.OData.Formatter.Serialization;
+using Microsoft.AspNet.OData;
 using Microsoft.OData.Edm;
 using Microsoft.Restier.WebApi.Results;
 
