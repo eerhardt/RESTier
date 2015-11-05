@@ -9,6 +9,7 @@ using System.Data.Entity;
 #endif
 using Microsoft.Restier.Core;
 using Microsoft.Restier.Core.Model;
+using System.Reflection;
 
 namespace Microsoft.Restier.EntityFramework.Model
 {
