@@ -111,6 +111,11 @@
       <Link>CodeAnalysisDictionary.xml</Link>
     </CodeAnalysisDictionary>
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNet.OData">
+      <HintPath>..\..\artifacts\Microsoft.AspNet.OData\Microsoft.AspNet.OData.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(StyleCopTargets)" Condition="Exists('$(StyleCopTargets)')" />
   <PropertyGroup>
