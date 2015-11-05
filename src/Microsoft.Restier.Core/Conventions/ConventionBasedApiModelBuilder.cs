@@ -184,14 +184,14 @@ namespace Microsoft.Restier.Core.Conventions
 
         private static bool IsEntitySetProperty(PropertyInfo property)
         {
-            return property.PropertyType.IsGenericType &&
-                   property.PropertyType.GetGenericTypeDefinition() == typeof(IQueryable<>) &&
-                   property.PropertyType.GetGenericArguments()[0].IsClass;
+            return property.PropertyType.GetTypeInfo().IsGenericType &&
+                   property.PropertyType.GetTypeInfo().GetGenericTypeDefinition() == typeof(IQueryable<>) &&
+                   property.PropertyType.GetTypeInfo().GetGenericParameterConstraints()[0].GetTypeInfo().IsClass;
         }
 
         private static bool IsSingletonProperty(PropertyInfo property)
         {
-            return !property.PropertyType.IsGenericType && property.PropertyType.IsClass;
+            return !property.PropertyType.GetTypeInfo().IsGenericType && property.PropertyType.GetTypeInfo().IsClass;
         }
 
         private IQueryable GetEntitySetQuery(QueryExpressionContext context)
@@ -312,7 +312,7 @@ namespace Microsoft.Restier.Core.Conventions
                     }
                 }
 
-                currentType = currentType.BaseType;
+                currentType = currentType.GetTypeInfo().BaseType;
             }
         }
 

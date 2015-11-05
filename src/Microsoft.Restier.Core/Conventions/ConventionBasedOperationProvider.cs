@@ -101,7 +101,7 @@ namespace Microsoft.Restier.Core.Conventions
 
         private static IEdmTypeReference GetReturnTypeReference(Type type, IEdmModel model)
         {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>))
+            if (type.GetTypeInfo().IsGenericType && type.GetTypeInfo().GetGenericTypeDefinition() == typeof(Task<>))
             {
                 // if the action returns a Task<T>, map that to just be returning a T
                 type = type.GetGenericArguments()[0];

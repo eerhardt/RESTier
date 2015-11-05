@@ -4,6 +4,7 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using Microsoft.OData.Edm;
 using Microsoft.Restier.Core.Query;
 
@@ -54,7 +55,7 @@ namespace Microsoft.Restier.Core.Conventions
 
             var returnType = context.VisitedNode.Type
                 .FindGenericType(typeof(IQueryable<>));
-            var elementType = returnType.GetGenericArguments()[0];
+            var elementType = returnType.GetTypeInfo().GenericTypeArguments[0];
             var methodName = ConventionBasedChangeSetConstants.FilterMethodEntitySetFilter + entitySet.Name;
             var method = this.targetType.GetQualifiedMethod(methodName);
             if (method != null && method.IsFamily &&

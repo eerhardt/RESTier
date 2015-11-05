@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.OData.Edm;
@@ -47,7 +48,7 @@ namespace Microsoft.Restier.Core.Query
             var queryType = expression.Type.FindGenericType(typeof(IQueryable<>));
             if (queryType != null)
             {
-                elementType = queryType.GetGenericArguments()[0];
+                elementType = queryType.GetTypeInfo().GenericTypeArguments[0];
             }
 
             // append count expression if requested

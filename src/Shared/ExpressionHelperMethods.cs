@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Reflection;
 
@@ -49,9 +50,9 @@ namespace System.Linq.Expressions
         {
             LambdaExpression lambdaExpression = expression as LambdaExpression;
 
-            Contract.Assert(expression.NodeType == ExpressionType.Lambda);
-            Contract.Assert(lambdaExpression != null);
-            Contract.Assert(lambdaExpression.Body.NodeType == ExpressionType.Call);
+            Debug.Assert(expression.NodeType == ExpressionType.Lambda);
+            Debug.Assert(lambdaExpression != null);
+            Debug.Assert(lambdaExpression.Body.NodeType == ExpressionType.Call);
 
             return (lambdaExpression.Body as MethodCallExpression).Method.GetGenericMethodDefinition();
         }

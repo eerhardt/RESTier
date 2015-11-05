@@ -43,7 +43,7 @@ namespace System
             }
 
             // If the definition is interface, we only need to check the interfaces implemented by the current type
-            if (definition.IsInterface)
+            if (definition.GetTypeInfo().IsInterface)
             {
                 foreach (var interfaceType in type.GetInterfaces())
                 {
@@ -53,7 +53,7 @@ namespace System
                     }
                 }
             }
-            else if (!type.IsInterface)
+            else if (!type.GetTypeInfo().IsInterface)
             {
                 // If the definition is not an interface, then the current type cannot be an interface too.
                 // Otherwise, we should only check the parent class types of the current type.
@@ -66,7 +66,7 @@ namespace System
                         return type;
                     }
 
-                    type = type.BaseType;
+                    type = type.GetTypeInfo().BaseType;
                 }
             }
 
@@ -93,8 +93,8 @@ namespace System
 
         private static bool IsGenericDefinition(this Type type, Type definition)
         {
-            return type.IsGenericType &&
-                   type.GetGenericTypeDefinition() == definition;
+            return type.GetTypeInfo().IsGenericType &&
+                   type.GetTypeInfo().GetGenericTypeDefinition() == definition;
         }
     }
 }

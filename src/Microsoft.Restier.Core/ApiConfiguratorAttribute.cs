@@ -3,6 +3,7 @@
 
 using System;
 using System.Linq;
+using System.Reflection;
 
 namespace Microsoft.Restier.Core
 {
@@ -10,7 +11,7 @@ namespace Microsoft.Restier.Core
     /// Specifies a set of methods that can participate in the
     /// configuration, initialization and disposal of an API.
     /// </summary>
-    [Serializable]
+//    [Serializable]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public abstract class ApiConfiguratorAttribute : Attribute
     {
@@ -36,13 +37,13 @@ namespace Microsoft.Restier.Core
         {
             Ensure.NotNull(type, "type");
             Ensure.NotNull(configuration, "configuration");
-            if (type.BaseType != null)
+            if (type.GetTypeInfo().BaseType != null)
             {
                 ApiConfiguratorAttribute.ApplyConfiguration(
-                    type.BaseType, configuration);
+                    type.GetTypeInfo().BaseType, configuration);
             }
 
-            var attributes = type.GetCustomAttributes(
+            var attributes = type.GetTypeInfo().GetCustomAttributes(
                 typeof(ApiConfiguratorAttribute), false);
             foreach (ApiConfiguratorAttribute attribute in attributes)
             {
@@ -68,13 +69,13 @@ namespace Microsoft.Restier.Core
         {
             Ensure.NotNull(type, "type");
             Ensure.NotNull(context, "context");
-            if (type.BaseType != null)
+            if (type.GetTypeInfo().BaseType != null)
             {
                 ApiConfiguratorAttribute.ApplyInitialization(
-                    type.BaseType, instance, context);
+                    type.GetTypeInfo().BaseType, instance, context);
             }
 
-            var attributes = type.GetCustomAttributes(
+            var attributes = type.GetTypeInfo().GetCustomAttributes(
                 typeof(ApiConfiguratorAttribute), false);
             foreach (ApiConfiguratorAttribute attribute in attributes)
             {
@@ -100,17 +101,17 @@ namespace Microsoft.Restier.Core
         {
             Ensure.NotNull(type, "type");
             Ensure.NotNull(context, "context");
-            var attributes = type.GetCustomAttributes(
+            var attributes = type.GetTypeInfo().GetCustomAttributes(
                 typeof(ApiConfiguratorAttribute), false);
             foreach (ApiConfiguratorAttribute attribute in attributes.Reverse())
             {
                 attribute.Dispose(context, type, instance);
             }
 
-            if (type.BaseType != null)
+            if (type.GetTypeInfo().BaseType != null)
             {
                 ApiConfiguratorAttribute.ApplyDisposal(
-                    type.BaseType, instance, context);
+                    type.GetTypeInfo().BaseType, instance, context);
             }
         }
 

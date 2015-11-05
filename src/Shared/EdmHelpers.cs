@@ -4,6 +4,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using Microsoft.OData.Edm.Library;
 using Microsoft.Restier.Core.Properties;
 
@@ -74,10 +75,10 @@ namespace Microsoft.OData.Edm
 
         private static EdmPrimitiveTypeKind? GetPrimitiveTypeKind(Type type, out bool isNullable)
         {
-            isNullable = type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+            isNullable = type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
             if (isNullable)
             {
-                type = type.GetGenericArguments()[0];
+                type = type.GetTypeInfo().GenericTypeArguments[0];
             }
 
             if (type == typeof(string))

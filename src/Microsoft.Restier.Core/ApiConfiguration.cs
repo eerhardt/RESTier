@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.OData.Edm;
 using Microsoft.Restier.Core.Properties;
 using Microsoft.Restier.Core.Query;
@@ -77,7 +78,7 @@ namespace Microsoft.Restier.Core
                 throw new InvalidOperationException(Resources.ApiConfigurationIsCommitted);
             }
 
-            if (!typeof(T).IsInterface)
+            if (!typeof(T).GetTypeInfo().IsInterface)
             {
                 throw new InvalidOperationException(Resources.ShouldBeInterfaceType);
             }
