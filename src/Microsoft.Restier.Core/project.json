@@ -5,7 +5,8 @@
   },
   "dependencies": {
     "Microsoft.NETCore": "5.0.1-beta-23409",
-    "Microsoft.NETCore.Portable.Compatibility": "1.0.1-beta-23409"
+    "Microsoft.NETCore.Portable.Compatibility": "1.0.1-beta-23409",
+    "Microsoft.OData.Edm": "6.13.0"
   },
   "frameworks": {
     "dotnet5.4": {
