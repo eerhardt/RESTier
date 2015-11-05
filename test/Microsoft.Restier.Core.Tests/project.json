@@ -1,0 +1,19 @@
+﻿{
+  "supports": {
+    "net46.app": { },
+    "dnxcore50.app": { }
+  },
+  "dependencies": {
+    "Microsoft.NETCore": "5.0.1-beta-23409",
+    "Microsoft.NETCore.Portable.Compatibility": "1.0.1-beta-23409",
+    "Microsoft.OData.Edm": "6.13.0",
+    "xunit": "2.1.0",
+    "xunit.extensibility.core": "2.1.0",
+    "xunit.runner.dnx":  "2.1.0-beta6-build191"
+  },
+  "frameworks": {
+    "dotnet5.4": {
+      "imports": "portable-net452"
+    }
+  }
+}
