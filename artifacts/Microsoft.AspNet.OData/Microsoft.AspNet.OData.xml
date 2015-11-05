@@ -546,7 +546,7 @@
         </member>
         <member name="P:Microsoft.AspNet.OData.EntityInstanceContext.Url">
             <summary>
-            Gets or sets a <see cref="T:Microsoft.AspNet.Mvc.UrlHelper"/> that may be used to generate links while serializing this entity
+            Gets or sets a <see cref="!:UrlHelper"/> that may be used to generate links while serializing this entity
             instance.
             </summary>
         </member>
@@ -606,7 +606,7 @@
         </member>
         <member name="P:Microsoft.AspNet.OData.FeedContext.Url">
             <summary>
-            Gets or sets the <see cref="T:Microsoft.AspNet.Mvc.UrlHelper"/> to be used for generating links while serializing this
+            Gets or sets the <see cref="T:Microsoft.AspNet.Mvc.Routing.UrlHelper"/> to be used for generating links while serializing this
             feed instance.
             </summary>
         </member>
@@ -900,7 +900,7 @@
         <member name="T:Microsoft.AspNet.OData.QueryableRestrictions">
             <summary>
             Represents a queryable restriction on an EDM property, including not filterable, not sortable,
-            not navigable, not expandable, not countable.
+            not navigable, not expandable, not countable, automatically expand.
             </summary>
         </member>
         <member name="M:Microsoft.AspNet.OData.QueryableRestrictions.#ctor">
@@ -949,6 +949,11 @@
             Gets or sets whether the property is not countable. default is false.
             </summary>
         </member>
+        <member name="P:Microsoft.AspNet.OData.QueryableRestrictions.AutoExpand">
+            <summary>
+            Gets or sets whether the property is automatically expanded. default is false.
+            </summary>
+        </member>
         <member name="T:Microsoft.AspNet.OData.QueryableRestrictionsAnnotation">
             <summary>
             Represents an annotation to add the queryable restrictions on an EDM property, including not filterable, 
@@ -966,11 +971,35 @@
             Gets the restrictions for the EDM property.
             </summary>
         </member>
+        <member name="M:Microsoft.AspNet.OData.TypeHelper.IsQueryPrimitiveType(System.Type)">
+            <summary>
+            Determines whether the given type is a primitive type or
+            is a <see cref="T:System.String"/>, <see cref="T:System.DateTime"/>, <see cref="T:System.Decimal"/>,
+            <see cref="T:System.Guid"/>, <see cref="T:System.DateTimeOffset"/> or <see cref="T:System.TimeSpan"/>.
+            </summary>
+            <param name="type">The type</param>
+            <returns><c>true</c> if the type is a primitive type.</returns>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.TypeHelper.GetInnerMostElementType(System.Type)">
+            <summary>
+            Returns the innermost element type for a given type, dealing with
+            nullables, arrays, etc.
+            </summary>
+            <param name="type">The type from which to get the innermost type.</param>
+            <returns>The innermost element type</returns>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.TypeHelper.GetImplementedIEnumerableType(System.Type)">
+            <summary>
+            Returns type of T if the type implements IEnumerable of T, otherwise, return null.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
         <member name="T:Microsoft.AspNet.OData.Builder.ActionConfiguration">
             <summary>
             ActionConfiguration represents an OData action that you wish to expose via your service.
             <remarks>
-            ActionConfigurations are exposed via $metadata as a <FunctionImport/> element.
+            ActionConfigurations are exposed via $metadata as a <Action/> element for bound function and <ActionImport/> element for unbound function.
             </remarks> 
             </summary>
         </member>
@@ -1947,7 +1976,7 @@
             <summary>
             FunctionConfiguration represents an OData function that you wish to expose via your service.
             <remarks>
-            FunctionConfigurations are exposed via $metadata as a <FunctionImport/> element.
+            FunctionConfigurations are exposed via $metadata as a <Function/> element for bound function and <FunctionImport/> element for unbound function.
             </remarks>
             </summary>
         </member>
@@ -3048,6 +3077,12 @@
             The EnumTypeConfiguration used to create this class.
             </summary>
         </member>
+        <member name="T:Microsoft.AspNet.OData.Builder.ODataActionAttribute">
+            <summary>
+            Represents an <see cref="T:System.Attribute"/> that can be placed on a method to specify
+            that the method represents a OData Action. It's used in DefaultODataModelProvider.
+            </summary>
+        </member>
         <member name="T:Microsoft.AspNet.OData.Builder.ODataConventionModelBuilder">
             <summary>
             <see cref="T:Microsoft.AspNet.OData.Builder.ODataConventionModelBuilder"/> is used to automatically map CLR classes to an EDM model based on a set of <see cref="T:Microsoft.AspNet.OData.Builder.Conventions.IConvention"/>.
@@ -3058,17 +3093,17 @@
             Initializes a new instance of the <see cref="T:Microsoft.AspNet.OData.Builder.ODataConventionModelBuilder"/> class.
             </summary>
         </member>
-        <member name="M:Microsoft.AspNet.OData.Builder.ODataConventionModelBuilder.#ctor(Microsoft.AspNet.Mvc.IAssemblyProvider)">
+        <member name="M:Microsoft.AspNet.OData.Builder.ODataConventionModelBuilder.#ctor(Microsoft.AspNet.Mvc.Infrastructure.IAssemblyProvider)">
             <summary>
             Initializes a new <see cref="T:Microsoft.AspNet.OData.Builder.ODataConventionModelBuilder"/>.
             </summary>
-            <param name="assemblyProvider">The <see cref="T:Microsoft.AspNet.Mvc.IAssemblyProvider"/> to use.</param>
+            <param name="assemblyProvider">The <see cref="T:Microsoft.AspNet.Mvc.Infrastructure.IAssemblyProvider"/> to use.</param>
         </member>
-        <member name="M:Microsoft.AspNet.OData.Builder.ODataConventionModelBuilder.#ctor(Microsoft.AspNet.Mvc.IAssemblyProvider,System.Boolean)">
+        <member name="M:Microsoft.AspNet.OData.Builder.ODataConventionModelBuilder.#ctor(Microsoft.AspNet.Mvc.Infrastructure.IAssemblyProvider,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:Microsoft.AspNet.OData.Builder.ODataConventionModelBuilder"/> class.
             </summary>
-            <param name="assemblyProvider">The <see cref="T:Microsoft.AspNet.Mvc.IAssemblyProvider"/> to use.</param>
+            <param name="assemblyProvider">The <see cref="T:Microsoft.AspNet.Mvc.Infrastructure.IAssemblyProvider"/> to use.</param>
             <param name="isQueryCompositionMode">If the model is being built for only querying.</param>
             <remarks>The model built if <paramref name="isQueryCompositionMode"/> is <c>true</c> has more relaxed
             inference rules and also treats all types as entity types. This constructor is intended for use by unit testing only.</remarks>
@@ -3142,6 +3177,12 @@
             <param name="builder">The <see cref="T:Microsoft.AspNet.OData.Builder.ODataConventionModelBuilder"/> to be enabled with lower camel case.</param>
             <param name="options">The <see cref="T:Microsoft.AspNet.OData.Builder.NameResolverOptions"/> for the lower camel case.</param>
             <returns>Returns itself so that multiple calls can be chained.</returns>
+        </member>
+        <member name="T:Microsoft.AspNet.OData.Builder.ODataFunctionAttribute">
+            <summary>
+            Represents an <see cref="T:System.Attribute"/> that can be placed on a method to specify
+            that the method represents a OData Function. It's used in DefaultODataModelProvider.
+            </summary>
         </member>
         <member name="T:Microsoft.AspNet.OData.Builder.ODataModelBuilder">
             <summary>
@@ -3259,6 +3300,14 @@
             <returns>The configuration object for the specified function.</returns>
         </member>
         <member name="M:Microsoft.AspNet.OData.Builder.ODataModelBuilder.AddEntityType(System.Type)">
+            <summary>
+            Registers an entity type as part of the model and returns an object that can be used to configure the entity.
+            This method can be called multiple times for the same entity to perform multiple lines of configuration.
+            </summary>
+            <param name="type">The type to be registered or configured.</param>
+            <returns>The configuration object for the specified entity type.</returns>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Builder.ODataModelBuilder.AddPrimitiveType(System.Type)">
             <summary>
             Registers an entity type as part of the model and returns an object that can be used to configure the entity.
             This method can be called multiple times for the same entity to perform multiple lines of configuration.
@@ -3717,12 +3766,17 @@
         <member name="P:Microsoft.AspNet.OData.Builder.PropertyConfiguration.IsRestricted">
             <summary>
             Gets whether the property is restricted, i.e. not filterable, not sortable, not navigable,
-            not expandable, or not countable.
+            not expandable, not countable, or automatically expand.
             </summary>
         </member>
         <member name="P:Microsoft.AspNet.OData.Builder.PropertyConfiguration.NotFilterable">
             <summary>
             Gets or sets whether the property is not filterable. default is false.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Builder.PropertyConfiguration.AutoExpand">
+            <summary>
+            Gets or sets whether the property is automatically expanded. default is false.
             </summary>
         </member>
         <member name="P:Microsoft.AspNet.OData.Builder.PropertyConfiguration.NonFilterable">
@@ -4701,7 +4755,7 @@
         </member>
         <member name="T:Microsoft.AspNet.OData.Extensions.UrlHelperExtensions">
             <summary>
-            Provides extension methods for the <see cref="T:Microsoft.AspNet.Mvc.UrlHelper"/> class.
+            Provides extension methods for the <see cref="!:UrlHelper"/> class.
             </summary>
         </member>
         <member name="M:Microsoft.AspNet.OData.Extensions.UrlHelperExtensions.CreateODataLink(Microsoft.AspNet.Mvc.IUrlHelper,Microsoft.AspNet.OData.Routing.ODataPathSegment[])">
@@ -4753,24 +4807,19 @@
             <param name="etagHeaderValue">The ETag header value.</param>
             <returns>Concurrency property names and values.</returns>
         </member>
-        <member name="F:Microsoft.AspNet.OData.Formatter.ModernInputFormatter.UTF8EncodingWithoutBOM">
-            <summary>
-            Returns UTF8 Encoding without BOM and throws on invalid bytes.
-            </summary>
-        </member>
         <member name="P:Microsoft.AspNet.OData.Formatter.ModernInputFormatter.SerializerSettings">
             <summary>
             Gets or sets the <see cref="T:Newtonsoft.Json.JsonSerializerSettings"/> used to configure the <see cref="T:Newtonsoft.Json.JsonSerializer"/>.
             </summary>
         </member>
-        <member name="M:Microsoft.AspNet.OData.Formatter.ModernInputFormatter.ReadRequestBodyAsync(Microsoft.AspNet.Mvc.InputFormatterContext)">
+        <member name="M:Microsoft.AspNet.OData.Formatter.ModernInputFormatter.ReadRequestBodyAsync(Microsoft.AspNet.Mvc.Formatters.InputFormatterContext)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.AspNet.OData.Formatter.ModernInputFormatter.CreateJsonReader(Microsoft.AspNet.Mvc.InputFormatterContext,System.IO.Stream,System.Text.Encoding)">
+        <member name="M:Microsoft.AspNet.OData.Formatter.ModernInputFormatter.CreateJsonReader(Microsoft.AspNet.Mvc.Formatters.InputFormatterContext,System.IO.Stream,System.Text.Encoding)">
             <summary>
             Called during deserialization to get the <see cref="T:Newtonsoft.Json.JsonReader"/>.
             </summary>
-            <param name="context">The <see cref="T:Microsoft.AspNet.Mvc.InputFormatterContext"/> for the read.</param>
+            <param name="context">The <see cref="T:Microsoft.AspNet.Mvc.Formatters.InputFormatterContext"/> for the read.</param>
             <param name="readStream">The <see cref="T:System.IO.Stream"/> from which to read.</param>
             <param name="effectiveEncoding">The <see cref="T:System.Text.Encoding"/> to use when reading.</param>
             <returns>The <see cref="T:Newtonsoft.Json.JsonReader"/> used during deserialization.</returns>
@@ -5009,6 +5058,48 @@
             <summary>
             A URL that can be used to retrieve a copy of the resource.
             </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.OData.Formatter.Serialization.ODataCollectionSerializer">
+            <summary>
+            ODataSerializer for serializing collection of Entities or Complex types or primitives.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Formatter.Serialization.ODataCollectionSerializer.#ctor(Microsoft.AspNet.OData.Formatter.Serialization.ODataSerializerProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.AspNet.OData.Formatter.Serialization.ODataCollectionSerializer"/> class.
+            </summary>
+            <param name="serializerProvider">The serializer provider to use to serialize nested objects.</param>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Formatter.Serialization.ODataCollectionSerializer.WriteObject(System.Object,System.Type,Microsoft.OData.Core.ODataMessageWriter,Microsoft.AspNet.OData.Formatter.Serialization.ODataSerializerContext)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Formatter.Serialization.ODataCollectionSerializer.CreateODataValue(System.Object,Microsoft.OData.Edm.IEdmTypeReference,Microsoft.AspNet.OData.Formatter.Serialization.ODataSerializerContext)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Formatter.Serialization.ODataCollectionSerializer.WriteCollection(Microsoft.OData.Core.ODataCollectionWriter,System.Object,Microsoft.OData.Edm.IEdmTypeReference,Microsoft.AspNet.OData.Formatter.Serialization.ODataSerializerContext)">
+            <summary>
+            Writes the given <paramref name="graph"/> using the given <paramref name="writer"/>.
+            </summary>
+            <param name="writer">The <see cref="T:Microsoft.OData.Core.ODataCollectionWriter"/> to use.</param>
+            <param name="graph">The collection to write.</param>
+            <param name="collectionType">The EDM type of the collection.</param>
+            <param name="writeContext">The serializer context.</param>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Formatter.Serialization.ODataCollectionSerializer.CreateODataCollectionValue(System.Collections.IEnumerable,Microsoft.OData.Edm.IEdmTypeReference,Microsoft.AspNet.OData.Formatter.Serialization.ODataSerializerContext)">
+            <summary>
+            Creates an <see cref="T:Microsoft.OData.Core.ODataCollectionValue"/> for the enumerable represented by <paramref name="enumerable"/>.
+            </summary>
+            <param name="enumerable">The value of the collection to be created.</param>
+            <param name="elementType">The element EDM type of the collection.</param>
+            <param name="writeContext">The serializer context to be used while creating the collection.</param>
+            <returns>The created <see cref="T:Microsoft.OData.Core.ODataCollectionValue"/>.</returns>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Formatter.Serialization.ODataCollectionSerializer.AddTypeNameAnnotationAsNeeded(Microsoft.OData.Core.ODataCollectionValue,Microsoft.AspNet.OData.Formatter.ODataMetadataLevel)">
+            <summary>
+            Adds the type name annotations required for proper json light serialization.
+            </summary>
+            <param name="value">The collection value for which the annotations have to be added.</param>
+            <param name="metadataLevel">The OData metadata level of the response.</param>
         </member>
         <member name="T:Microsoft.AspNet.OData.Formatter.Serialization.ODataComplexTypeSerializer">
             <summary>
@@ -5415,7 +5506,7 @@
         </member>
         <member name="P:Microsoft.AspNet.OData.Formatter.Serialization.ODataSerializerContext.Url">
             <summary>
-            Gets or sets the <see cref="T:Microsoft.AspNet.Mvc.UrlHelper"/> to use for generating OData links.
+            Gets or sets the <see cref="!:UrlHelper"/> to use for generating OData links.
             </summary>
         </member>
         <member name="P:Microsoft.AspNet.OData.Formatter.Serialization.ODataSerializerContext.NavigationSource">
@@ -7828,6 +7919,341 @@
             The attribute routing template contains invalid segment '{0}'.
             </summary>
         </member>
+        <member name="T:Microsoft.AspNet.OData.Query.AllowedArithmeticOperators">
+            <summary>
+            Arithmetic operators to allow for querying using $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedArithmeticOperators.None">
+            <summary>
+            A value that corresponds to allowing no arithmetic operators in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedArithmeticOperators.Add">
+            <summary>
+            A value that corresponds to allowing 'Add' arithmetic operator in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedArithmeticOperators.Subtract">
+            <summary>
+            A value that corresponds to allowing 'Subtract' arithmetic operator in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedArithmeticOperators.Multiply">
+            <summary>
+            A value that corresponds to allowing 'Multiply' arithmetic operator in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedArithmeticOperators.Divide">
+            <summary>
+            A value that corresponds to allowing 'Divide' arithmetic operator in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedArithmeticOperators.Modulo">
+            <summary>
+            A value that corresponds to allowing 'Modulo' arithmetic operator in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedArithmeticOperators.All">
+            <summary>
+            A value that corresponds to allowing all arithmetic operators in $filter.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.OData.Query.AllowedFunctions">
+            <summary>
+            Functions to allow for querying using $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.None">
+            <summary>
+            A value that corresponds to allowing no functions in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.StartsWith">
+            <summary>
+            A value that corresponds to allowing 'StartsWith' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.EndsWith">
+            <summary>
+            A value that corresponds to allowing 'EndsWith' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.SubstringOf">
+            <summary>
+            A value that corresponds to allowing 'SubstringOf' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Length">
+            <summary>
+            A value that corresponds to allowing 'Length' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.IndexOf">
+            <summary>
+            A value that corresponds to allowing 'IndexOf' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Concat">
+            <summary>
+            A value that corresponds to allowing 'Concat' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Substring">
+            <summary>
+            A value that corresponds to allowing 'Substring' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.ToLower">
+            <summary>
+            A value that corresponds to allowing 'ToLower' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.ToUpper">
+            <summary>
+            A value that corresponds to allowing 'ToUpper' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Trim">
+            <summary>
+            A value that corresponds to allowing 'Trim' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Cast">
+            <summary>
+            A value that corresponds to allowing 'Cast' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Year">
+            <summary>
+            A value that corresponds to allowing 'Year' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Date">
+            <summary>
+            A value that corresponds to allowing 'Date' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Month">
+            <summary>
+            A value that corresponds to allowing 'Month' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Time">
+            <summary>
+            A value that corresponds to allowing 'Time' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Day">
+            <summary>
+            A value that corresponds to allowing 'Day' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Hour">
+            <summary>
+            A value that corresponds to allowing 'Hour' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Minute">
+            <summary>
+            A value that corresponds to allowing 'Minute' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Second">
+            <summary>
+            A value that corresponds to allowing 'Second' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.FractionalSeconds">
+            <summary>
+            A value that corresponds to allowing 'Fractionalseconds' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Round">
+            <summary>
+            A value that corresponds to allowing 'Round' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Floor">
+            <summary>
+            A value that corresponds to allowing 'Floor' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Ceiling">
+            <summary>
+            A value that corresponds to allowing 'Ceiling' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.IsOf">
+            <summary>
+            A value that corresponds to allowing 'IsOf' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.Any">
+            <summary>
+            A value that corresponds to allowing 'Any' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.All">
+            <summary>
+            A value that corresponds to allowing 'All' function in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.AllStringFunctions">
+            <summary>
+            A value that corresponds to allowing all string related functions in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.AllDateTimeFunctions">
+            <summary>
+            A value that corresponds to allowing all datetime related functions in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.AllMathFunctions">
+            <summary>
+            A value that corresponds to allowing math related functions in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedFunctions.AllFunctions">
+            <summary>
+            A value that corresponds to allowing all functions in $filter.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.OData.Query.AllowedLogicalOperators">
+            <summary>
+            Logical operators to allow for querying using $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedLogicalOperators.None">
+            <summary>
+            A value that corresponds to allowing no logical operators in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedLogicalOperators.Or">
+            <summary>
+            A value that corresponds to allowing 'Or' logical operator in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedLogicalOperators.And">
+            <summary>
+            A value that corresponds to allowing 'And' logical operator in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedLogicalOperators.Equal">
+            <summary>
+            A value that corresponds to allowing 'Equal' logical operator in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedLogicalOperators.NotEqual">
+            <summary>
+            A value that corresponds to allowing 'NotEqual' logical operator in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedLogicalOperators.GreaterThan">
+            <summary>
+            A value that corresponds to allowing 'GreaterThan' logical operator in $filter.
+            </summary>   
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedLogicalOperators.GreaterThanOrEqual">
+            <summary>
+            A value that corresponds to allowing 'GreaterThanOrEqual' logical operator in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedLogicalOperators.LessThan">
+            <summary>
+            A value that corresponds to allowing 'LessThan' logical operator in $filter.
+            </summary>  
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedLogicalOperators.LessThanOrEqual">
+            <summary>
+            A value that corresponds to allowing 'LessThanOrEqual' logical operator in $filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedLogicalOperators.Not">
+            <summary>
+            A value that corresponds to allowing 'Not' logical operator in $filter.
+            </summary>  
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedLogicalOperators.Has">
+            <summary>
+            A value that corresponds to allowing 'Has' logical operator in $filter.
+            </summary>  
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedLogicalOperators.All">
+            <summary>
+            A value that corresponds to allowing all logical operators in $filter.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.OData.Query.AllowedQueryOptions">
+            <summary>
+            OData query options to allow for querying.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedQueryOptions.None">
+            <summary>
+            A value that corresponds to allowing no query options.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedQueryOptions.Filter">
+            <summary>
+            A value that corresponds to allowing the $filter query option.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedQueryOptions.Expand">
+            <summary>
+            A value that corresponds to allowing the $expand query option.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedQueryOptions.Select">
+            <summary>
+            A value that corresponds to allowing the $select query option.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedQueryOptions.OrderBy">
+            <summary>
+            A value that corresponds to allowing the $orderby query option.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedQueryOptions.Top">
+            <summary>
+            A value that corresponds to allowing the $top query option.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedQueryOptions.Skip">
+            <summary>
+            A value that corresponds to allowing the $skip query option.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedQueryOptions.Count">
+            <summary>
+            A value that corresponds to allowing the $count query option.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedQueryOptions.Format">
+            <summary>
+            A value that corresponds to allowing the $format query option.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedQueryOptions.SkipToken">
+            <summary>
+            A value that corresponds to allowing the $skiptoken query option.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedQueryOptions.DeltaToken">
+            <summary>
+            A value that corresponds to allowing the $deltatoken query option.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedQueryOptions.Supported">
+            <summary>
+            A value that corresponds to the default query options supported by <see cref="T:Microsoft.AspNet.OData.EnableQueryAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.OData.Query.AllowedQueryOptions.All">
+            <summary>
+            A value that corresponds to allowing all query options.
+            </summary>
+        </member>
         <member name="T:Microsoft.AspNet.OData.Query.FilterQueryOption">
             <summary>
             This defines a $filter OData query option for querying.
@@ -7857,7 +8283,7 @@
              Gets the raw $filter value.
             </summary>
         </member>
-        <member name="M:Microsoft.AspNet.OData.Query.FilterQueryOption.ApplyTo(System.Linq.IQueryable,Microsoft.AspNet.OData.Query.ODataQuerySettings,Microsoft.AspNet.Mvc.IAssemblyProvider)">
+        <member name="M:Microsoft.AspNet.OData.Query.FilterQueryOption.ApplyTo(System.Linq.IQueryable,Microsoft.AspNet.OData.Query.ODataQuerySettings,Microsoft.AspNet.Mvc.Infrastructure.IAssemblyProvider)">
             <summary>
             Apply the filter query to the given IQueryable.
             </summary>
@@ -7867,7 +8293,7 @@
             </remarks>
             <param name="query">The original <see cref="T:System.Linq.IQueryable"/>.</param>
             <param name="querySettings">The <see cref="T:Microsoft.AspNet.OData.Query.ODataQuerySettings"/> that contains all the query application related settings.</param>
-            <param name="assemblyProvider">The <see cref="T:Microsoft.AspNet.Mvc.IAssemblyProvider"/> to use.</param>
+            <param name="assemblyProvider">The <see cref="T:Microsoft.AspNet.Mvc.Infrastructure.IAssemblyProvider"/> to use.</param>
             <returns>The new <see cref="T:System.Linq.IQueryable"/> after the filter query has been applied to.</returns>
         </member>
         <member name="T:Microsoft.AspNet.OData.Query.HandleNullPropagationOption">
@@ -7891,6 +8317,63 @@
             <summary>
             Do not handle null propagation during query composition.
             </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.OData.Query.IPropertyMapper">
+            <summary>
+            The result of a $select and $expand projection is represented as an <see cref="T:Microsoft.AspNet.OData.Query.ISelectExpandWrapper"/>
+            instance. That instance can be projected into an <see cref="T:System.Collections.Generic.IDictionary`2"/> instance by calling
+            <see cref="!:ISelectExpandWrapper.ToDictionary(Func&lt;IEdmModel,IEdmStructuredType,IPropertyMapper&gt;)"/>. 
+            That method will use the function to construct an <see cref="T:Microsoft.AspNet.OData.Query.IPropertyMapper"/> that will map the property 
+            names in that projection to the keys in the returned <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            The main purpose of converting an <see cref="T:Microsoft.AspNet.OData.Query.ISelectExpandWrapper"/> instance into an 
+            <see cref="T:System.Collections.Generic.IDictionary`2"/> (using the method mentioned above) is to allow changing the names of the 
+            properties in the <see cref="T:Microsoft.OData.Edm.IEdmStructuredType"/> that will be used during the serialization of the $select 
+            and $expand projection by a given formatter. For example, to support custom serialization attributes of a
+            particular formatter.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.IPropertyMapper.MapProperty(System.String)">
+            <summary>
+            Defines a mapping between the name of an <see cref="T:Microsoft.OData.Edm.IEdmProperty"/> of an <see cref="T:Microsoft.OData.Edm.IEdmStructuredType"/>
+            and the name that should be used in other contexts, for example, when projecting an instance of an 
+            <see cref="T:Microsoft.AspNet.OData.Query.ISelectExpandWrapper"/> into an instance of an <see cref="T:System.Collections.Generic.IDictionary`2"/>
+            </summary>
+            <param name="propertyName">
+            The name of the property in the <see cref="T:Microsoft.OData.Edm.IEdmStructuredType" /> represented
+            by this instance of <see cref="T:Microsoft.AspNet.OData.Query.ISelectExpandWrapper"/>.
+            </param>
+            <returns>
+            The value that will be used as the key for this property in the <see cref="T:System.Collections.Generic.IDictionary`2" />
+            resulting from calling ToDictionary on an <see cref="T:Microsoft.AspNet.OData.Query.ISelectExpandWrapper"/> instance.
+            </returns>
+        </member>
+        <member name="T:Microsoft.AspNet.OData.Query.ISelectExpandWrapper">
+            <summary>
+            Represents the result of a $select and $expand query operation.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.ISelectExpandWrapper.ToDictionary">
+            <summary>
+            Projects the result of a $select and $expand query to a <see cref="T:System.Collections.Generic.IDictionary`2" />.
+            </summary>
+            <returns>An <see cref="T:System.Collections.Generic.IDictionary`2"/> representing the $select and $expand result.</returns>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.ISelectExpandWrapper.ToDictionary(System.Func{Microsoft.OData.Edm.IEdmModel,Microsoft.OData.Edm.IEdmStructuredType,Microsoft.AspNet.OData.Query.IPropertyMapper})">
+            <summary>
+            Projects the result of a $select and/or $expand query to an <see cref="T:System.Collections.Generic.IDictionary`2" /> using 
+            the given <paramref name="propertyMapperProvider"/>. The <paramref name="propertyMapperProvider"/> is used 
+            to obtain an <see cref="T:Microsoft.AspNet.OData.Query.IPropertyMapper"/> for the <see cref="T:Microsoft.OData.Edm.IEdmStructuredType"/> that this 
+            <see cref="T:Microsoft.AspNet.OData.Query.ISelectExpandWrapper"/> instance represents. This <see cref="T:Microsoft.AspNet.OData.Query.IPropertyMapper"/> will be used to 
+            map the properties of the <see cref="T:Microsoft.AspNet.OData.Query.ISelectExpandWrapper"/> instance to the keys of the 
+            returned <see cref="T:System.Collections.Generic.IDictionary`2"/>. This method can be used, for example, to map the property 
+            names in the <see cref="T:Microsoft.OData.Edm.IEdmStructuredType"/> to the names that should be used to serialize the properties 
+            that this projection contains.
+            </summary>
+            <param name="propertyMapperProvider">
+            A function that provides a new instance of an <see cref="T:Microsoft.AspNet.OData.Query.IPropertyMapper"/> for a given 
+            <see cref="T:Microsoft.OData.Edm.IEdmStructuredType"/> and a given <see cref="T:Microsoft.OData.Edm.IEdmModel"/>.
+            </param>
+            <returns>An <see cref="T:System.Collections.Generic.IDictionary`2"/> representing the $select and $expand result.</returns>
         </member>
         <member name="T:Microsoft.AspNet.OData.Query.ITruncatedCollection">
             <summary>
@@ -7967,6 +8450,45 @@
             <summary>
             Gets the <see cref="T:Microsoft.AspNet.OData.Query.FilterQueryOption"/>.
             </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.ODataQueryOptions.Skip">
+            <summary>
+            Specifies a non-negative integer n that excludes the first n items of the queried collection from the result.         
+            </summary>
+            <remarks>
+            Corresponds to the $skip query option.  The service returns items starting at position n+1.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.ODataQueryOptions.Top">
+            <summary>
+            Specifies a non-negative integer n that limits the number of items returned from a collection.
+            </summary>
+            <remarks>
+            Corresponds to the $take query option.  he service returns the number of available items up to but not greater than the specified value n.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.ODataQueryOptions.Count">
+            <summary>
+            The $count system query option allows clients to request a count of the matching resources included with the resources in the response. 
+            The $count query option has a Boolean value of true or false.       
+            </summary>
+            <remarks>
+            The semantics of $count is covered in the [OData - Protocol] document.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.ODataQueryOptions.ApplyForCount(System.Linq.IQueryable,Microsoft.AspNet.OData.Query.ODataQuerySettings)">
+            <summary>
+            Applies the queries that are applicable to the $count computation, as per the OData protocol.
+            </summary>
+            <remarks>
+            According to the protocol:
+            <para>
+            The $count system query option ignores any $top, $skip, or $expand query options, and returns the total count of results across all pages including only those results matching any specified $filter and $search. Clients should be aware that the count returned inline may not exactly equal the actual number of items returned, due to latency between calculating the count and enumerating the last value or due to inexact calculations on the service.
+            </para>
+            </remarks>
+            <param name="query">The original <see cref="T:System.Linq.IQueryable"/>.</param>
+            <param name="querySettings">The settings to use in query composition.</param>
+            <returns>The new <see cref="T:System.Linq.IQueryable"/> after the query has been applied to.</returns>
         </member>
         <member name="M:Microsoft.AspNet.OData.Query.ODataQueryOptions.ApplyTo(System.Linq.IQueryable,Microsoft.AspNet.OData.Query.ODataQuerySettings)">
             <summary>
@@ -8084,6 +8606,98 @@
              Gets the raw $deltatoken query value from the incoming request Uri if exists.
             </summary>
         </member>
+        <member name="T:Microsoft.AspNet.OData.Query.ODataValidationSettings">
+            <summary>
+            This class describes the validation settings for querying.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.ODataValidationSettings.AllowedArithmeticOperators">
+            <summary>
+            Gets or sets a list of allowed arithmetic operators including 'add', 'sub', 'mul', 'div', 'mod'.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.ODataValidationSettings.AllowedFunctions">
+             <summary>
+             Gets or sets a list of allowed functions used in the $filter query. 
+             
+             The allowed functions include the following:
+             
+             String related: substringof, endswith, startswith, length, indexof, substring, tolower, toupper, trim, concat
+            
+             e.g. ~/Customers?$filter=length(CompanyName) eq 19
+            
+             Date and Time related: year, month, day, hour, minute, second, fractionalseconds, date, time
+            
+             e.g. ~/Employees?$filter=year(BirthDate) eq 1971
+            
+             Math related: round, floor, ceiling
+            
+             Type related:isof, cast, 
+            
+             Collection related: any, all
+              
+             </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.ODataValidationSettings.AllowedLogicalOperators">
+            <summary>
+            Gets or sets a list of allowed logical operators such as 'eq', 'ne', 'gt', 'ge', 'lt', 'le', 'and', 'or', 'not'.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.ODataValidationSettings.AllowedOrderByProperties">
+            <summary>
+            Gets a list of properties one can orderby the result with. Note, by default this list is empty, 
+            it means it can be ordered by any property.
+            
+            For example, having an empty collection means client can order the queryable result by any properties.  
+            Adding "Name" to this list means that it only allows queryable result to be ordered by Name property.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.ODataValidationSettings.AllowedQueryOptions">
+            <summary>
+            Gets or sets the query parameters that are allowed inside query. The default is all query options,
+            including $filter, $skip, $top, $orderby, $expand, $select, $count, $format, $skiptoken and $deltatoken.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.ODataValidationSettings.MaxOrderByNodeCount">
+            <summary>
+            Gets or sets the maximum number of expressions that can be present in the $orderby.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.ODataValidationSettings.MaxAnyAllExpressionDepth">
+            <summary>
+            Gets or sets the maximum depth of the Any or All elements nested inside the query.
+            </summary>
+            <remarks>
+            The default value is 1.
+            </remarks>
+            <value>
+            The maximum depth of the Any or All elements nested inside the query.
+            </value>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.ODataValidationSettings.MaxNodeCount">
+            <summary>
+            Gets or sets the maximum number of the nodes inside the $filter syntax tree.
+            </summary>
+            <remarks>
+            The default value is 100.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.ODataValidationSettings.MaxSkip">
+            <summary>
+            Gets or sets the max value of $skip that a client can request.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.ODataValidationSettings.MaxTop">
+            <summary>
+            Gets or sets the max value of $top that a client can request.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.ODataValidationSettings.MaxExpansionDepth">
+            <summary>
+            Gets or sets the max expansion depth for the $expand query option.
+            </summary>
+            <remarks>To disable the maximum expansion depth check, set this property to 0.</remarks>
+        </member>
         <member name="T:Microsoft.AspNet.OData.Query.SelectExpandNode">
             <summary>
             Describes the set of structural properties and navigation properties and actions to select and navigation properties to expand while 
@@ -8140,6 +8754,124 @@
             Gets the list of OData functions to be included in the response.
             </summary>
         </member>
+        <member name="T:Microsoft.AspNet.OData.Query.SelectExpandQueryOption">
+            <summary>
+            Represents the OData $select and $expand query options.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.SelectExpandQueryOption.#ctor(System.String,System.String,Microsoft.AspNet.OData.ODataQueryContext,Microsoft.OData.Core.UriParser.ODataQueryOptionParser,Microsoft.AspNet.Http.HttpRequest)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.AspNet.OData.Query.SelectExpandQueryOption"/> class.
+            </summary>
+            <param name="select">The $select query parameter value.</param>
+            <param name="expand">The $expand query parameter value.</param>
+            <param name="context">The <see cref="T:Microsoft.AspNet.OData.ODataQueryContext"/> which contains the <see cref="T:Microsoft.OData.Edm.IEdmModel"/> and some type information.</param>
+            <param name="queryOptionParser">The <see cref="T:Microsoft.OData.Core.UriParser.ODataQueryOptionParser"/> which is used to parse the query option.</param>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.SelectExpandQueryOption.Context">
+            <summary>
+             Gets the given <see cref="T:Microsoft.AspNet.OData.ODataQueryContext"/>.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.SelectExpandQueryOption.RawSelect">
+            <summary>
+            Gets the raw $select value.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.SelectExpandQueryOption.RawExpand">
+            <summary>
+            Gets the raw $expand value.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.SelectExpandQueryOption.Validator">
+            <summary>
+            Gets or sets the $select and $expand query validator.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.SelectExpandQueryOption.SelectExpandClause">
+            <summary>
+            Gets the parsed <see cref="P:Microsoft.AspNet.OData.Query.SelectExpandQueryOption.SelectExpandClause"/> for this query option.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.SelectExpandQueryOption.LevelsMaxLiteralExpansionDepth">
+            <summary>
+            Gets or sets the number of levels that a top level $expand=NavigationProperty($levels=max)
+            will be expanded.
+            This value will decrease by one with each nesting level in the $expand clause.
+            For example, with a property value 5, the following query $expand=A($expand=B($expand=C($levels=max)))
+            will be interpreted as $expand=A($expand=B($expand=C($levels=3))).
+            If the query gets validated, the <see cref="P:Microsoft.AspNet.OData.Query.ODataValidationSettings.MaxExpansionDepth"/> value
+            must be greater than or equal to this value.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.SelectExpandQueryOption.ApplyTo(System.Linq.IQueryable,Microsoft.AspNet.OData.Query.ODataQuerySettings)">
+            <summary>
+            Applies the $select and $expand query options to the given <see cref="T:System.Linq.IQueryable"/> using the given
+            <see cref="T:Microsoft.AspNet.OData.Query.ODataQuerySettings"/>.
+            </summary>
+            <param name="queryable">The original <see cref="T:System.Linq.IQueryable"/>.</param>
+            <param name="settings">The <see cref="T:Microsoft.AspNet.OData.Query.ODataQuerySettings"/> that contains all the query application related settings.</param>
+            <returns>The new <see cref="T:System.Linq.IQueryable"/> after the filter query has been applied to.</returns>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.SelectExpandQueryOption.ApplyTo(System.Linq.IQueryable,Microsoft.AspNet.OData.Query.ODataQuerySettings,Microsoft.AspNet.Mvc.Infrastructure.IAssemblyProvider)">
+            <summary>
+            Applies the $select and $expand query options to the given <see cref="T:System.Linq.IQueryable"/> using the given
+            <see cref="T:Microsoft.AspNet.OData.Query.ODataQuerySettings"/>.
+            </summary>
+            <param name="queryable">The original <see cref="T:System.Linq.IQueryable"/>.</param>
+            <param name="settings">The <see cref="T:Microsoft.AspNet.OData.Query.ODataQuerySettings"/> that contains all the query application related settings.</param>
+            <param name="assembliesProvider">The <see cref="T:Microsoft.AspNet.Mvc.Infrastructure.IAssemblyProvider"/> to use.</param>
+            <returns>The new <see cref="T:System.Linq.IQueryable"/> after the filter query has been applied to.</returns>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.SelectExpandQueryOption.ApplyTo(System.Object,Microsoft.AspNet.OData.Query.ODataQuerySettings)">
+            <summary>
+            Applies the $select and $expand query options to the given entity using the given <see cref="T:Microsoft.AspNet.OData.Query.ODataQuerySettings"/>.
+            </summary>
+            <param name="entity">The original entity.</param>
+            <param name="settings">The <see cref="T:Microsoft.AspNet.OData.Query.ODataQuerySettings"/> that contains all the query application related settings.</param>
+            <returns>The new entity after the $select and $expand query has been applied to.</returns>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.SelectExpandQueryOption.ApplyTo(System.Object,Microsoft.AspNet.OData.Query.ODataQuerySettings,Microsoft.AspNet.Mvc.Infrastructure.IAssemblyProvider)">
+            <summary>
+            Applies the $select and $expand query options to the given entity using the given <see cref="T:Microsoft.AspNet.OData.Query.ODataQuerySettings"/>.
+            </summary>
+            <param name="entity">The original entity.</param>
+            <param name="settings">The <see cref="T:Microsoft.AspNet.OData.Query.ODataQuerySettings"/> that contains all the query application related settings.</param>
+            <param name="assembliesProvider">The <see cref="!:IAssembliesResolver"/> to use.</param>
+            <returns>The new entity after the $select and $expand query has been applied to.</returns>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.SelectExpandQueryOption.Validate(Microsoft.AspNet.OData.Query.ODataValidationSettings)">
+            <summary>
+            Validate the $select and $expand query based on the given <paramref name="validationSettings"/>. It throws an ODataException if validation failed.
+            </summary>
+            <param name="validationSettings">The <see cref="T:Microsoft.AspNet.OData.Query.ODataValidationSettings"/> instance which contains all the validation settings.</param>
+        </member>
+        <member name="T:Microsoft.AspNet.OData.Query.TruncatedCollection`1">
+            <summary>
+            Represents a class that truncates a collection to a given page size.
+            </summary>
+            <typeparam name="T">The collection element type.</typeparam>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.TruncatedCollection`1.#ctor(System.Collections.Generic.IEnumerable{`0},System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.AspNet.OData.Query.TruncatedCollection`1"/> class.
+            </summary>
+            <param name="source">The collection to be truncated.</param>
+            <param name="pageSize">The page size.</param>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.TruncatedCollection`1.#ctor(System.Linq.IQueryable{`0},System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.AspNet.OData.Query.TruncatedCollection`1"/> class.
+            </summary>
+            <param name="source">The queryable collection to be truncated.</param>
+            <param name="pageSize">The page size.</param>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.TruncatedCollection`1.PageSize">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.TruncatedCollection`1.IsTruncated">
+            <inheritdoc />
+        </member>
         <member name="T:Microsoft.AspNet.OData.Query.UnsortableAttribute">
             <summary>
             Represents an <see cref="T:System.Attribute"/> that can be placed on a property to specify that the property cannot be used in the $orderby OData query option.
@@ -8174,6 +8906,104 @@
             <param name="left">First byte array.</param>
             <param name="right">Second byte array.</param>
             <returns>true if the arrays are not equal; false otherwise.</returns>
+        </member>
+        <member name="T:Microsoft.AspNet.OData.Query.Expressions.ModelContainer">
+            <summary>
+            EntityFramework does not let you inject non primitive constant values (like IEdmModel) in Select queries. Primitives like strings and guids can be
+            injected as they can be translated into a SQL query. This container associates a unique string with each EDM model, so that, given the string the model
+            can be retrieved later.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.OData.Query.Expressions.NamedPropertyExpression">
+            <summary>
+            Represents a container that captures a named property that is a part of the select expand query.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.OData.Query.Expressions.PropertyContainer">
+            <summary>
+            A container of property names and property values.
+            </summary>
+            <remarks>
+            EntityFramework understands only member initializations in Select expressions. Also, it doesn't understand type casts for non-primitive types. So, 
+            SelectExpandBinder has to generate strongly types expressions that involve only property access. This class represents the base class for a bunch of 
+            generic derived types that are used in the expressions that SelectExpandBinder generates.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.Expressions.PropertyContainer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.AspNet.OData.Query.Expressions.PropertyContainer"/> class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.Expressions.PropertyContainer.ToDictionary(Microsoft.AspNet.OData.Query.IPropertyMapper,System.Boolean)">
+            <summary>
+            Builds the dictionary of properties in this container keyed by the property name.
+            </summary>
+            <returns>The dictionary of properties in this container keyed by the property name.</returns>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.Expressions.PropertyContainer.ToDictionaryCore(System.Collections.Generic.Dictionary{System.String,System.Object},Microsoft.AspNet.OData.Query.IPropertyMapper,System.Boolean)">
+            <summary>
+            Adds the properties in this container to the given dictionary.
+            </summary>
+            <param name="dictionary">The dictionary to add the properties to.</param>
+            <param name="includeAutoSelected">Specifies whether auto selected properties should be included.</param>
+            <param name="propertyMapper">An object responsible to map the properties in this property container to the
+            the value that will be used as the key in the dictionary we are adding properties to.</param>
+        </member>
+        <member name="T:Microsoft.AspNet.OData.Query.Expressions.SelectExpandBinder">
+            <summary>
+            Applies the given <see cref="T:Microsoft.AspNet.OData.Query.SelectExpandQueryOption"/> to the given <see cref="T:System.Linq.IQueryable"/>.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.OData.Query.Expressions.SelectExpandWrapper`1">
+            <summary>
+            Represents a container class that contains properties that are either selected or expanded using $select and $expand.
+            </summary>
+            <typeparam name="TElement">The element being selected and expanded.</typeparam>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.Expressions.SelectExpandWrapper`1.Instance">
+            <summary>
+            Gets or sets the instance of the element being selected and expanded.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.Expressions.SelectExpandWrapper`1.ModelID">
+            <summary>
+            An ID to uniquely identify the model in the <see cref="T:Microsoft.AspNet.OData.Query.Expressions.ModelContainer"/>.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.Expressions.SelectExpandWrapper`1.TypeName">
+            <summary>
+            Gets or sets the EDM type name of the element being selected and expanded. 
+            </summary>
+            <remarks>This is required by the <see cref="!:ODataMediaTypeFormatter"/> during serialization. If the instance property is not
+            null, the type name will not be set as the type name can be figured from the instance runtime type.</remarks>
+        </member>
+        <member name="P:Microsoft.AspNet.OData.Query.Expressions.SelectExpandWrapper`1.Container">
+            <summary>
+            Gets or sets the property container that contains the properties being expanded. 
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.Expressions.SelectExpandWrapper`1.GetEdmType">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.Expressions.SelectExpandWrapper`1.TryGetPropertyValue(System.String,System.Object@)">
+            <inheritdoc />
+        </member>
+        <member name="T:Microsoft.AspNet.OData.Query.Expressions.SelectExpandWrapperConverter">
+            <summary>
+            Represents a custom <see cref="T:Newtonsoft.Json.JsonConverter"/> to serialize <see cref="T:Microsoft.AspNet.OData.Query.Expressions.SelectExpandWrapper`1"/> instances to JSON.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.OData.Query.Validators.SelectExpandQueryValidator">
+            <summary>
+            Represents a validator used to validate a <see cref="T:Microsoft.AspNet.OData.Query.SelectExpandQueryOption" /> based on the <see cref="T:Microsoft.AspNet.OData.Query.ODataValidationSettings"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.OData.Query.Validators.SelectExpandQueryValidator.Validate(Microsoft.AspNet.OData.Query.SelectExpandQueryOption,Microsoft.AspNet.OData.Query.ODataValidationSettings)">
+            <summary>
+            Validates a <see cref="!:TopQueryOption" />.
+            </summary>
+            <param name="selectExpandQueryOption">The $select and $expand query.</param>
+            <param name="validationSettings">The validation settings.</param>
         </member>
         <member name="T:Microsoft.AspNet.OData.Routing.BatchPathSegment">
             <summary>
@@ -9459,48 +10289,6 @@
         </member>
         <member name="M:Microsoft.AspNet.OData.Routing.ValuePathSegment.TryMatch(Microsoft.AspNet.OData.Routing.ODataPathSegment,System.Collections.Generic.IDictionary{System.String,System.Object})">
             <inheritdoc/>
-        </member>
-        <member name="T:System.Web.OData.Formatter.Serialization.ODataCollectionSerializer">
-            <summary>
-            ODataSerializer for serializing collection of Entities or Complex types or primitives.
-            </summary>
-        </member>
-        <member name="M:System.Web.OData.Formatter.Serialization.ODataCollectionSerializer.#ctor(Microsoft.AspNet.OData.Formatter.Serialization.ODataSerializerProvider)">
-            <summary>
-            Initializes a new instance of the <see cref="T:System.Web.OData.Formatter.Serialization.ODataCollectionSerializer"/> class.
-            </summary>
-            <param name="serializerProvider">The serializer provider to use to serialize nested objects.</param>
-        </member>
-        <member name="M:System.Web.OData.Formatter.Serialization.ODataCollectionSerializer.WriteObject(System.Object,System.Type,Microsoft.OData.Core.ODataMessageWriter,Microsoft.AspNet.OData.Formatter.Serialization.ODataSerializerContext)">
-            <inheritdoc/>
-        </member>
-        <member name="M:System.Web.OData.Formatter.Serialization.ODataCollectionSerializer.CreateODataValue(System.Object,Microsoft.OData.Edm.IEdmTypeReference,Microsoft.AspNet.OData.Formatter.Serialization.ODataSerializerContext)">
-            <inheritdoc/>
-        </member>
-        <member name="M:System.Web.OData.Formatter.Serialization.ODataCollectionSerializer.WriteCollection(Microsoft.OData.Core.ODataCollectionWriter,System.Object,Microsoft.OData.Edm.IEdmTypeReference,Microsoft.AspNet.OData.Formatter.Serialization.ODataSerializerContext)">
-            <summary>
-            Writes the given <paramref name="graph"/> using the given <paramref name="writer"/>.
-            </summary>
-            <param name="writer">The <see cref="T:Microsoft.OData.Core.ODataCollectionWriter"/> to use.</param>
-            <param name="graph">The collection to write.</param>
-            <param name="collectionType">The EDM type of the collection.</param>
-            <param name="writeContext">The serializer context.</param>
-        </member>
-        <member name="M:System.Web.OData.Formatter.Serialization.ODataCollectionSerializer.CreateODataCollectionValue(System.Collections.IEnumerable,Microsoft.OData.Edm.IEdmTypeReference,Microsoft.AspNet.OData.Formatter.Serialization.ODataSerializerContext)">
-            <summary>
-            Creates an <see cref="T:Microsoft.OData.Core.ODataCollectionValue"/> for the enumerable represented by <paramref name="enumerable"/>.
-            </summary>
-            <param name="enumerable">The value of the collection to be created.</param>
-            <param name="elementType">The element EDM type of the collection.</param>
-            <param name="writeContext">The serializer context to be used while creating the collection.</param>
-            <returns>The created <see cref="T:Microsoft.OData.Core.ODataCollectionValue"/>.</returns>
-        </member>
-        <member name="M:System.Web.OData.Formatter.Serialization.ODataCollectionSerializer.AddTypeNameAnnotationAsNeeded(Microsoft.OData.Core.ODataCollectionValue,Microsoft.AspNet.OData.Formatter.ODataMetadataLevel)">
-            <summary>
-            Adds the type name annotations required for proper json light serialization.
-            </summary>
-            <param name="value">The collection value for which the annotations have to be added.</param>
-            <param name="metadataLevel">The OData metadata level of the response.</param>
         </member>
     </members>
 </doc>

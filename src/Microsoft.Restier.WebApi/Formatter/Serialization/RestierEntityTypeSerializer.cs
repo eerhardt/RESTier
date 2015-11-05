@@ -4,7 +4,7 @@
 using System;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Formatter.Serialization;
-using Microsoft.AspNet.OData;
+using Microsoft.OData.Core;
 using Microsoft.Restier.WebApi.Results;
 
 namespace Microsoft.Restier.WebApi.Formatter.Serialization
