@@ -468,8 +468,9 @@ namespace Microsoft.Restier.WebApi
             EntityTagHeaderValue etagHeaderValue = this.Request.Headers.IfMatch.SingleOrDefault();
             if (etagHeaderValue != null)
             {
-                ETag etag = this.Request.GetETag(etagHeaderValue);
-                etag.ApplyTo(originalValues);
+                // TODO (.NETCORE) - Original Values
+                //ETag etag = this.Request.GetETag(etagHeaderValue);
+                //etag.ApplyTo(originalValues);
 
                 originalValues.Add(ETagHeaderKey, etagHeaderValue.Tag);
             }

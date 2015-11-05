@@ -46,7 +46,7 @@ namespace Microsoft.Restier.WebApi.Formatter.Serialization
         public override ODataSerializer GetODataPayloadSerializer(
             IEdmModel model,
             Type type,
-            HttpRequestMessage request)
+            HttpRequest request)
         {
             ODataSerializer serializer = base.GetODataPayloadSerializer(model, type, request);
 

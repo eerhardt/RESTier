@@ -10,23 +10,24 @@ namespace Microsoft.Restier.WebApi
 {
     internal static class Extensions
     {
-        private const string PropertyNameOfConcurrencyProperties = "ConcurrencyProperties";
+        // TODO (.NETCORE) - Original Values
+        //private const string PropertyNameOfConcurrencyProperties = "ConcurrencyProperties";
 
-        private static PropertyInfo etagConcurrencyPropertiesProperty = typeof(ETag).GetProperty(
-            PropertyNameOfConcurrencyProperties, BindingFlags.NonPublic | BindingFlags.Instance);
+        //private static PropertyInfo etagConcurrencyPropertiesProperty = typeof(ETag).GetProperty(
+        //    PropertyNameOfConcurrencyProperties, BindingFlags.NonPublic | BindingFlags.Instance);
 
-        public static void ApplyTo(this ETag etag, IDictionary<string, object> propertyValues)
-        {
-            if (etag != null)
-            {
-                IDictionary<string, object> concurrencyProperties =
-                    (IDictionary<string, object>)etagConcurrencyPropertiesProperty.GetValue(etag);
-                foreach (KeyValuePair<string, object> item in concurrencyProperties)
-                {
-                    propertyValues.Add(item.Key, item.Value);
-                }
-            }
-        }
+        //public static void ApplyTo(this ETag etag, IDictionary<string, object> propertyValues)
+        //{
+        //    if (etag != null)
+        //    {
+        //        IDictionary<string, object> concurrencyProperties =
+        //            (IDictionary<string, object>)etagConcurrencyPropertiesProperty.GetValue(etag);
+        //        foreach (KeyValuePair<string, object> item in concurrencyProperties)
+        //        {
+        //            propertyValues.Add(item.Key, item.Value);
+        //        }
+        //    }
+        //}
 
         public static IReadOnlyDictionary<string, object> CreatePropertyDictionary(this Delta entity)
         {

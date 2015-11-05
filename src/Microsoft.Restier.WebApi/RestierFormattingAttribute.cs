@@ -26,8 +26,8 @@ namespace Microsoft.Restier.WebApi
         {
             Ensure.NotNull(controllerSettings, "controllerSettings");
             var controllerFormatters = controllerSettings.Formatters;
-            IList<ODataMediaTypeFormatter> odataFormatters =
-                controllerFormatters.OfType<ODataMediaTypeFormatter>().ToList();
+            IList<ODataOutputFormatter> odataFormatters =
+                controllerFormatters.OfType<ODataOutputFormatter>().ToList();
             if (!odataFormatters.Any())
             {
                 foreach (var formatter in odataFormatters)
@@ -36,9 +36,8 @@ namespace Microsoft.Restier.WebApi
                 }
             }
 
-            odataFormatters = ODataMediaTypeFormatters.Create(
-                new DefaultRestierSerializerProvider(),
-                new DefaultRestierDeserializerProvider());
+            odataFormatters = ODataOutputFormatters.Create(
+                new DefaultRestierSerializerProvider());
             controllerFormatters.InsertRange(0, odataFormatters);
         }
     }

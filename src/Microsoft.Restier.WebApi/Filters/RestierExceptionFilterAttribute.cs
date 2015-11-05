@@ -102,12 +102,13 @@ namespace Microsoft.Restier.WebApi.Filters
             var notSupportedException = context.Exception as NotSupportedException;
             if (notSupportedException != null)
             {
-                if (notSupportedException.TargetSite.DeclaringType == typeof(RestierQueryBuilder))
-                {
-                    throw new HttpResponseException(context.Request.CreateErrorResponse(
-                        HttpStatusCode.NotFound,
-                        notSupportedException.Message));
-                }
+                // TODO (.NETCORE) - TargetSite is not available.
+                //if (notSupportedException.TargetSite.DeclaringType == typeof(RestierQueryBuilder))
+                //{
+                //    throw new HttpResponseException(context.Request.CreateErrorResponse(
+                //        HttpStatusCode.NotFound,
+                //        notSupportedException.Message));
+                //}
             }
 
             return Task.FromResult<HttpResponseMessage>(null);

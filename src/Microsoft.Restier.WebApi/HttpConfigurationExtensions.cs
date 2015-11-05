@@ -9,10 +9,9 @@ using System.Web.Http;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNet.OData.Routing.Conventions;
-using Microsoft.AspNet.OData;
+using Microsoft.OData.Core;
 using Microsoft.OData.Edm;
 using Microsoft.Restier.Core;
-using Microsoft.Restier.WebApi.Batch;
 using Microsoft.Restier.WebApi.Routing;
 
 namespace Microsoft.Restier.WebApi
@@ -32,14 +31,14 @@ namespace Microsoft.Restier.WebApi
         /// <param name="routeName">The name of the route.</param>
         /// <param name="routePrefix">The prefix of the route.</param>
         /// <param name="apiFactory">The callback to create API instances.</param>
-        /// <param name="batchHandler">The handler for batch requests.</param>
         /// <returns>The task object containing the resulted <see cref="ODataRoute"/> instance.</returns>
+//TODO (.NETCORE) - /// <param name="batchHandler">The handler for batch requests.</param>
         public static async Task<ODataRoute> MapRestierRoute<TApi>(
             this HttpConfiguration config,
             string routeName,
             string routePrefix,
-            Func<IApi> apiFactory,
-            RestierBatchHandler batchHandler = null)
+            Func<IApi> apiFactory)
+//TODO (.NETCORE) - RestierBatchHandler batchHandler = null)
             where TApi : ApiBase
         {
             Ensure.NotNull(apiFactory, "apiFactory");
@@ -50,13 +49,16 @@ namespace Microsoft.Restier.WebApi
                 model.EnsurePayloadValueConverter();
                 var conventions = CreateRestierRoutingConventions(config, model, apiFactory);
 
+#if BATCH
+//TODO (.NETCORE)
                 if (batchHandler != null && batchHandler.ApiFactory == null)
                 {
                     batchHandler.ApiFactory = apiFactory;
                 }
+#endif
 
                 return config.MapODataServiceRoute(
-                    routeName, routePrefix, model, new DefaultODataPathHandler(), conventions, batchHandler);
+                    routeName, routePrefix, model, new DefaultODataPathHandler(), conventions /* //TODO (.NETCORE) -, batchHandler*/);
             }
         }
 
@@ -67,17 +69,17 @@ namespace Microsoft.Restier.WebApi
         /// <param name="config">The <see cref="HttpConfiguration"/> instance.</param>
         /// <param name="routeName">The name of the route.</param>
         /// <param name="routePrefix">The prefix of the route.</param>
-        /// <param name="batchHandler">The handler for batch requests.</param>
         /// <returns>The task object containing the resulted <see cref="ODataRoute"/> instance.</returns>
+//TODO (.NETCORE) - /// <param name="batchHandler">The handler for batch requests.</param>
         public static async Task<ODataRoute> MapRestierRoute<TApi>(
             this HttpConfiguration config,
             string routeName,
-            string routePrefix,
-            RestierBatchHandler batchHandler = null)
+            string routePrefix)
+//TODO (.NETCORE) -RestierBatchHandler batchHandler = null)
             where TApi : ApiBase, new()
         {
             return await MapRestierRoute<TApi>(
-                config, routeName, routePrefix, () => new TApi(), batchHandler);
+                config, routeName, routePrefix, () => new TApi()/* //TODO (.NETCORE) -, batchHandler*/);
         }
 
         /// <summary>
@@ -90,19 +92,21 @@ namespace Microsoft.Restier.WebApi
         private static IList<IODataRoutingConvention> CreateRestierRoutingConventions(
             this HttpConfiguration config, IEdmModel model, Func<IApi> apiFactory)
         {
-            var conventions = ODataRoutingConventions.CreateDefaultWithAttributeRouting(config, model);
-            var index = 0;
-            for (; index < conventions.Count; index++)
-            {
-                var attributeRouting = conventions[index] as AttributeRoutingConvention;
-                if (attributeRouting != null)
-                {
-                    break;
-                }
-            }
+            // TODO (.NETCORE)
+            //var conventions = DefaultODataRoutingConvention.CreateDefaultWithAttributeRouting(config, model);
+            //var index = 0;
+            //for (; index < conventions.Count; index++)
+            //{
+            //    var attributeRouting = conventions[index] as AttributeRoutingConvention;
+            //    if (attributeRouting != null)
+            //    {
+            //        break;
+            //    }
+            //}
 
-            conventions.Insert(index + 1, new RestierRoutingConvention(apiFactory));
-            return conventions;
+            //conventions.Insert(index + 1, new RestierRoutingConvention(apiFactory));
+            //return conventions;
+            return new IODataRoutingConvention[] { new DefaultODataRoutingConvention() };
         }
 
         private static void EnsurePayloadValueConverter(this IEdmModel model)

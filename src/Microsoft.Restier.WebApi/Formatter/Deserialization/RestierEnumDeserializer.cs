@@ -14,7 +14,8 @@ namespace Microsoft.Restier.WebApi.Formatter.Deserialization
     /// </summary>
     internal class RestierEnumDeserializer : ODataEdmTypeDeserializer
     {
-        private ODataEnumDeserializer enumDeserializer = new ODataEnumDeserializer();
+        // TODO (.NETCORE) - ODataEnumDeserializer is unavailable.
+        //private ODataEnumDeserializer enumDeserializer = new ODataEnumDeserializer();
 
         public RestierEnumDeserializer()
             : base(ODataPayloadKind.Property)
@@ -27,7 +28,8 @@ namespace Microsoft.Restier.WebApi.Formatter.Deserialization
             Type type,
             ODataDeserializerContext readContext)
         {
-            return enumDeserializer.Read(messageReader, type, readContext);
+            //return enumDeserializer.Read(messageReader, type, readContext);
+            return base.Read(messageReader, type, readContext);
         }
 
         /// <inheritdoc />
@@ -36,15 +38,16 @@ namespace Microsoft.Restier.WebApi.Formatter.Deserialization
             IEdmTypeReference edmType,
             ODataDeserializerContext readContext)
         {
-            var result = enumDeserializer.ReadInline(item, edmType, readContext);
+            //var result = enumDeserializer.ReadInline(item, edmType, readContext);
 
-            var edmEnumObject = result as EdmEnumObject;
-            if (edmEnumObject != null)
-            {
-                return edmEnumObject.Value;
-            }
+            //var edmEnumObject = result as EdmEnumObject;
+            //if (edmEnumObject != null)
+            //{
+            //    return edmEnumObject.Value;
+            //}
 
-            return result;
+            //return result;
+            return base.ReadInline(item, edmType, readContext);
         }
     }
 }
