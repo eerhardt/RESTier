@@ -46,37 +46,39 @@ namespace Microsoft.Restier.Core.Conventions
             {
                 object entity = dataModificationEntry.Entity;
 
-                // TODO GitHubIssue#50 : should this PropertyDescriptorCollection be cached?
-                PropertyDescriptorCollection properties =
-                    new DataAnnotations.AssociatedMetadataTypeTypeDescriptionProvider(entity.GetType())
-                    .GetTypeDescriptor(entity).GetProperties();
+                // TODO (.NETCORE): need to figure out how to do this in .NET Core
 
-                DataAnnotations.ValidationContext validationContext = new DataAnnotations.ValidationContext(entity);
+                //// TODO GitHubIssue#50 : should this PropertyDescriptorCollection be cached?
+                //PropertyDescriptorCollection properties =
+                //    new DataAnnotations.AssociatedMetadataTypeTypeDescriptionProvider(entity.GetType())
+                //    .GetTypeDescriptor(entity).GetProperties();
 
-                foreach (PropertyDescriptor property in properties)
-                {
-                    validationContext.MemberName = property.Name;
+                //DataAnnotations.ValidationContext validationContext = new DataAnnotations.ValidationContext(entity);
 
-                    IEnumerable<DataAnnotations.ValidationAttribute> validationAttributes =
-                        property.Attributes.OfType<DataAnnotations.ValidationAttribute>();
-                    foreach (DataAnnotations.ValidationAttribute validationAttribute in validationAttributes)
-                    {
-                        object value = property.GetValue(entity);
-                        DataAnnotations.ValidationResult validationResult =
-                            validationAttribute.GetValidationResult(value, validationContext);
-                        if (validationResult != DataAnnotations.ValidationResult.Success)
-                        {
-                            validationResults.Add(new ValidationResult()
-                            {
-                                Id = validationAttribute.GetType().FullName,
-                                Message = validationResult.ErrorMessage,
-                                Severity = ValidationSeverity.Error,
-                                Target = entity,
-                                PropertyName = property.Name
-                            });
-                        }
-                    }
-                }
+                //foreach (PropertyDescriptor property in properties)
+                //{
+                //    validationContext.MemberName = property.Name;
+
+                //    IEnumerable<DataAnnotations.ValidationAttribute> validationAttributes =
+                //        property.Attributes.OfType<DataAnnotations.ValidationAttribute>();
+                //    foreach (DataAnnotations.ValidationAttribute validationAttribute in validationAttributes)
+                //    {
+                //        object value = property.GetValue(entity);
+                //        DataAnnotations.ValidationResult validationResult =
+                //            validationAttribute.GetValidationResult(value, validationContext);
+                //        if (validationResult != DataAnnotations.ValidationResult.Success)
+                //        {
+                //            validationResults.Add(new ValidationResult()
+                //            {
+                //                Id = validationAttribute.GetType().FullName,
+                //                Message = validationResult.ErrorMessage,
+                //                Severity = ValidationSeverity.Error,
+                //                Target = entity,
+                //                PropertyName = property.Name
+                //            });
+                //        }
+                //    }
+                //}
             }
 
             return Task.WhenAll();

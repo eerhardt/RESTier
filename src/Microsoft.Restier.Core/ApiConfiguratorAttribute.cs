@@ -11,7 +11,7 @@ namespace Microsoft.Restier.Core
     /// Specifies a set of methods that can participate in the
     /// configuration, initialization and disposal of an API.
     /// </summary>
-//    [Serializable]
+// TODO (.NETCORE)    [Serializable]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public abstract class ApiConfiguratorAttribute : Attribute
     {
