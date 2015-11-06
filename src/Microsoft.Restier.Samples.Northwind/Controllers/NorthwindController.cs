@@ -4,20 +4,17 @@
 #if EF7
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
-using Microsoft.Data.Entity.Update;
 #else
 using System.Data.Entity.Infrastructure;
 #endif
 using System.Linq;
 using System.Net;
-using System.Web.Http;
-using System.Web.OData;
-using System.Web.OData.Routing;
 using Microsoft.Restier.Samples.Northwind.Models;
+using Microsoft.AspNet.Mvc;
 
 namespace Microsoft.Restier.Samples.Northwind.Controllers
 {
-    public class NorthwindController : ODataController
+    public class NorthwindController : Controller
     {
         private NorthwindApi api;
 
@@ -43,14 +40,13 @@ namespace Microsoft.Restier.Samples.Northwind.Controllers
         }
 
         // OData Attribute Routing
-        [HttpPut]
-        [ODataRoute("Products({key})/UnitPrice")]
-        public IHttpActionResult UpdateProductUnitPrice(int key, [FromBody]decimal price)
+        [HttpPut("Products({key})/UnitPrice")]
+        public IActionResult UpdateProductUnitPrice(int key, [FromBody]decimal price)
         {
             var entity = DbContext.Products.FirstOrDefault(e => e.ProductID == key);
             if (entity == null)
             {
-                return NotFound();
+                return HttpNotFound();
             }
             entity.UnitPrice = price;
 
@@ -62,7 +58,7 @@ namespace Microsoft.Restier.Samples.Northwind.Controllers
             {
                 if (!DbContext.Products.Any(p => p.ProductID == key))
                 {
-                    return NotFound();
+                    return HttpNotFound();
                 }
                 else
                 {
@@ -72,24 +68,22 @@ namespace Microsoft.Restier.Samples.Northwind.Controllers
             return Ok(price);
         }
 
-        [HttpGet]
-        [ODataRoute("Products/Microsoft.Restier.Samples.Northwind.Models.MostExpensive")]
-        public IHttpActionResult MostExpensive()
+        [HttpGet("Products/Microsoft.Restier.Samples.Northwind.Models.MostExpensive")]
+        public IActionResult MostExpensive()
         {
             var product = DbContext.Products.Max(p => p.UnitPrice);
             return Ok(product);
         }
 
-        [HttpPost]
-        [ODataRoute("Products({key})/Microsoft.Restier.Samples.Northwind.Models.IncreasePrice")]
-        public IHttpActionResult IncreasePrice([FromODataUri] int key, ODataActionParameters parameters)
+        [HttpPost("Products({key})/Microsoft.Restier.Samples.Northwind.Models.IncreasePrice")]
+        public IActionResult IncreasePrice([FromRoute] int key, [FromHeader] int diff)
         {
             var entity = DbContext.Products.FirstOrDefault(e => e.ProductID == key);
             if (entity == null)
             {
-                return NotFound();
+                return HttpNotFound();
             }
-            entity.UnitPrice = entity.UnitPrice + (int)parameters["diff"];
+            entity.UnitPrice = entity.UnitPrice + diff;
 
             try
             {
@@ -99,22 +93,21 @@ namespace Microsoft.Restier.Samples.Northwind.Controllers
             {
                 if (!DbContext.Products.Any(p => p.ProductID == key))
                 {
-                    return NotFound();
+                    return HttpNotFound();
                 }
                 else
                 {
                     throw;
                 }
             }
-            return StatusCode(HttpStatusCode.NoContent);
+            return new NoContentResult();
         }
 
-        [HttpPost]
-        [ODataRoute("ResetDataSource")]
-        public IHttpActionResult ResetDataSource()
+        [HttpPost("ResetDataSource")]
+        public IActionResult ResetDataSource()
         {
             DbContext.ResetDataSource();
-            return StatusCode(HttpStatusCode.NoContent);
+            return new NoContentResult();
         }
 
         /// <summary>
