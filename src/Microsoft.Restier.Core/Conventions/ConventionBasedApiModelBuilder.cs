@@ -186,7 +186,7 @@ namespace Microsoft.Restier.Core.Conventions
         {
             return property.PropertyType.GetTypeInfo().IsGenericType &&
                    property.PropertyType.GetTypeInfo().GetGenericTypeDefinition() == typeof(IQueryable<>) &&
-                   property.PropertyType.GetTypeInfo().GetGenericParameterConstraints()[0].GetTypeInfo().IsClass;
+                   property.PropertyType.GetTypeInfo().GenericTypeArguments[0].GetTypeInfo().IsClass;
         }
 
         private static bool IsSingletonProperty(PropertyInfo property)
