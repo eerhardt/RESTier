@@ -22,7 +22,7 @@ namespace Microsoft.Restier.EntityFramework
     /// </summary>
     /// <typeparam name="T">The DbContext type.</typeparam>
 #if EF7
-    [CLSCompliant(false)]
+// TODO (.NETCORE)    [CLSCompliant(false)]
 #endif
     public class DbApi<T> : ApiBase
         where T : DbContext

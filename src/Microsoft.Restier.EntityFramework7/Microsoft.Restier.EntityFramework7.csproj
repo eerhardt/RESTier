@@ -14,13 +14,13 @@
     <TargetFrameworkProfile />
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);EF7</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS;EF7</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <DelaySign>true</DelaySign>
